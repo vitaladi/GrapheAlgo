@@ -1,7 +1,5 @@
 package graphe;
 
-
-
 import arete.Arete;
 
 public class Graphe {
@@ -19,7 +17,7 @@ public class Graphe {
 	public Graphe() {
 		this(0, null);
 	}
-public String [] getNomsSommets() {
+	public String [] getNomsSommets() {
 		return nomsSommets;
 	}
 	public int getNbSommets() {
@@ -54,7 +52,19 @@ public String [] getNomsSommets() {
 	}
 	
 	
+	public void empiler (int s, int [] pilch)
+	{
+		pilch[s] = pilch[0];
+		pilch[0] = s;
+		
+	}
 	
+	public int depiler (int [] pilch)
+	{
+		int var = pilch[0];
+		pilch[0] = pilch[var];
+		return var;
+	}
 	
 
 }
