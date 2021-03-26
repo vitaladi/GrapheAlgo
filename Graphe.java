@@ -1,17 +1,17 @@
 package graphe;
 
-import java.util.ArrayList;
+
 
 import arete.Arete;
 
 public class Graphe {
 
 	private int nbSommets;
-	private ArrayList<Arete> aretes;
-	private ArrayList<ArrayList<Integer>> matriceAdjacence;
-	private ArrayList<String> nomsSommets;
+	private Arete [] aretes;
+	private int [][] matriceAdjacence;
+	private String [] nomsSommets;
 
-	public Graphe(int nbSommets, ArrayList<Arete> aretes) {
+	public Graphe(int nbSommets,  Arete [] aretes) {
 		this.nbSommets = nbSommets;
 		this.aretes = aretes;
 	}
@@ -19,7 +19,7 @@ public class Graphe {
 	public Graphe() {
 		this(0, null);
 	}
-public ArrayList<String> getNomsSommets() {
+public String [] getNomsSommets() {
 		return nomsSommets;
 	}
 	public int getNbSommets() {
@@ -27,11 +27,11 @@ public ArrayList<String> getNomsSommets() {
 	}
 	
 
-	public ArrayList<Arete> getAretes() {
+	public  Arete [] getAretes() {
 		return aretes;
 	}
 
-	public ArrayList<ArrayList<Integer>> getMatriceAdjacence() {
+	public int [][] getMatriceAdjacence() {
 		return matriceAdjacence;
 	}
 
@@ -41,15 +41,15 @@ public ArrayList<String> getNomsSommets() {
 		this.nbSommets = nbSommets;
 	}
 
-	public void setAretes(ArrayList<Arete> aretes) {
+	public void setAretes(Arete [] aretes) {
 		this.aretes = aretes;
 	}
 
-	public void setMatriceAdjacence(ArrayList<ArrayList<Integer>> matriceAdjacence) {
+	public void setMatriceAdjacence(int [][] matriceAdjacence) {
 		this.matriceAdjacence = matriceAdjacence;
 	}
 
-	public void setNomsSommets(ArrayList<String> nomsSommets) {
+	public void setNomsSommets(String [] nomsSommets) {
 		this.nomsSommets = nomsSommets;
 	}
 	
