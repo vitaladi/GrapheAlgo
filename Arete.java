@@ -1,4 +1,4 @@
-package arete;
+package test1;
 
 public class Arete {
 
