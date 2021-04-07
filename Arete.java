@@ -32,5 +32,4 @@ public class Arete {
 	public int getDestination() {
 		return destination;
 	}
-
 }

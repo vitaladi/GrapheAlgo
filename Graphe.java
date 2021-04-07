@@ -151,4 +151,60 @@ public class Graphe {
 	    prem[i] = prem[j];
 	    nb[i] += nb[j];
 	}
+	
+	
+	public int dmin(int[] d, boolean[] InS)
+	{
+		int min = Integer.MAX_VALUE;
+		int min_index = 0;
+		
+		for(int v = 0; v < getNbSommets(); ++v)
+		{
+			if (InS[v] == false && d[v] <= min)
+			{
+				min = d[v];
+				min_index = v;
+			}
+		}
+		return min_index;
+	}
+	
+	public void dijkstra(int s, int[][] c, int[] dist, int[] pred)
+	{
+
+	    int n = getNbSommets();
+	    
+	    dist = new int[n];
+	    
+	    boolean[] InS = new boolean[n];
+
+        pred = new int[n];
+
+
+        for(int i = 0; i < n; ++i)
+        {
+            pred[0] = -1;
+            dist[i] = Integer.MAX_VALUE;
+            InS[i] = false;
+        }
+
+        dist[s] = 0;
+
+        for(int count = 0; count < n - 1; ++count)
+        {
+        	int u = dmin(dist, InS);
+        	
+        	InS[u] = true;
+
+            for(int v = 0; v < n; ++v)
+            {
+            	if(!InS[v] && (c[u][v] != 0) && dist[u] + c[u][v] < dist[v])
+                {
+                    pred[v] = u;
+                    dist[v] = dist[u] + c[u][v];
+                }
+            }
+        }
+	}
+	
 }
