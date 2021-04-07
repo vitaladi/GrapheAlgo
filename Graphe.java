@@ -1,6 +1,7 @@
 package graphe;
 
-import java.util.ArrayList;
+import java.lang.reflect.Array;
+
 import java.util.Arrays;
 
 import arete.Arete;
@@ -12,12 +13,14 @@ public class Graphe {
 	private Arete [] aretes;
 	private int [][] matriceAdjacence;
 	private String [] nomsSommets;
-
+	private int nbAretes;
+	
 	
 	//constructeurs
 	public Graphe(int nbSommets,  Arete [] aretes) {
 		this.nbSommets = nbSommets;
 		this.aretes = aretes;
+		//this.nbAretes=this.aretes.length-1;
 	}
 
 	public Graphe() {
@@ -32,6 +35,9 @@ public class Graphe {
 		return nbSommets;
 	}
 	
+	public int getNbAretes() {
+		return nbAretes;
+	}
 
 	public  Arete [] getAretes() {
 		return aretes;
@@ -45,23 +51,28 @@ public class Graphe {
 		return aretes.length;
 	}
 	
+	public Arete getIndexArete(int index) {
+		return this.aretes[index];
+	}
+	
 	//Setters
+	public void setIndexArete(Arete ar,int index) {
+		this.aretes[index]=ar;
+	}
+	
+	public void setNbAretes(int nbAretes) {
+		this.nbAretes=nbAretes;
+	}
+	
 	public void setNbSommets(int nbSommets) {
 		this.nbSommets = nbSommets;
 	}
 
 	public void setAretes(Arete [] aretes) {
-		if(aretes.length<this.aretes.length) {
-			Arrays.fill(this.aretes, null );
-			this.aretes=new Arete[aretes.length];
-		} 
-		else if(aretes.length>this.aretes.length) {
-			this.aretes=new Arete[aretes.length];
-		}
-		
+		this.aretes=new Arete[aretes.length];
 		for (int i=0;i<aretes.length;i++) {
 			this.aretes[i]=aretes[i];
-		}		
+		}
 	}
 
 	public void setMatriceAdjacence(int [][] matriceAdjacence) {
@@ -190,5 +201,74 @@ public class Graphe {
 		while(I[i]==-1) 
 			i++;
 		System.out.println(i+")");
+	}
+	
+	public void trier(Graphe g)
+	{
+		int p,o,d;
+		for (int i = 0; i < g.nbAretes - 1; i++)
+			for (int j = i + 1; j < g.nbAretes; j++)
+				if ((g.aretes[j].getPoids() < g.aretes[i].getPoids()) || (g.aretes[j].getPoids() == g.aretes[i].getPoids() && g.aretes[j].getOrigine() < g.aretes[i].getDestination()) || (g.aretes[j].getPoids() == g.aretes[i].getPoids() && g.aretes[j].getDestination() < g.aretes[i].getDestination()))
+				{
+					p = g.aretes[j].getPoids();
+					o=g.aretes[j].getOrigine();
+					d=g.aretes[j].getDestination();
+					
+					g.aretes[j].setPoids(g.aretes[i].getPoids());
+					g.aretes[j].setOrigine(g.aretes[i].getOrigine());
+					g.aretes[j].setDestination(g.aretes[i].getDestination());
+					
+					g.aretes[i].setPoids(p);
+					g.aretes[i].setOrigine(o);
+					g.aretes[i].setDestination(d);
+				}
+	}
+	
+	public void fusionner(int i, int j, int []prem, int []pilch, int []cfc, int []NbElem)
+	// i et j sont les numeros des composantes à fusionner
+	// en une seule composante qui portera le numéro le plus 
+	// petit des deux 
+	{
+		if (NbElem[i] < NbElem[j])
+		{
+			int aux = i;
+			i = j;
+			j = aux;
+		}
+		int s = prem[j];
+		cfc[s] = i;
+		while (pilch[s] != 0)
+		{
+			s = pilch[s];
+			cfc[s] = i;
+		}
+		pilch[s] = prem[i];
+		prem[i] = prem[j];
+		NbElem[i] += NbElem[j];
+	}
+	
+	//Graphe g est le graphe d'entrée et il est déja trié
+	//Graphe t est le graphe de sortie
+	public void kruskal(Graphe g, Graphe t,int []prem, int []pilch, int []cfc, int []NbElem)
+	//Les tableaux prem, pilch et cfc sont des variables globales initialis�es dans le main
+	{
+		t.aretes = new Arete[g.nbSommets-1];
+		int x; 
+		int y; 
+		int i = 0, j = 0;
+		while (j < g.getNbSommets()-1)
+		{
+			Arete ar = g.aretes[i];
+			x = cfc[ar.getOrigine()];
+			y = cfc[ar.getDestination()];
+			if (x != y)
+			{
+				t.aretes[j++] = g.aretes[i];
+				fusionner(x, y, prem, pilch, cfc, NbElem);
+			}
+			i++;
+		}
+		t.setNbSommets(g.getNbSommets());
+		t.setNbAretes(g.getNbSommets()-1);
 	}
 }
