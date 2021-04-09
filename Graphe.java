@@ -158,5 +158,52 @@ public class Graphe {
 	}
 
 	
+	
+	
+	
+	
+	
+	
+	
+	public int[] desc_largeur(int r) 
+	{ 
+		int nb_som = aps[0]; 
+		int i = 0, j = 1, k = 0, ifin, s, t, it; 
+		int[] fil = new int[nb_som+1];
+		fil[0] = nb_som; 
+		int[] dist = new int[nb_som+1]; 
+		dist[0] = nb_som; 
+		fil[1] = r;
+		
+		for (int h = 1; h <= nb_som; h++) 
+		{
+				dist[h] = -1; 
+				dist[r] = 0;
+		}
+			
+		while ( i < j )     
+		{
+			k++; 
+			ifin = j; 
+			while (i < ifin)   
+			{
+				i++; s = fil[i]; 
+				it = aps[s]; 
+				t = fs[it];
+				while (t > 0)    
+				{ 
+					if (dist[t] == -1) 
+					{ 
+						j++; 
+						fil[j] = t;  
+						dist[t] = k;      
+					}
+					t = fs[++it];
+				}
+			}
+			
+		}
+		return dist;
+	}
 
 }

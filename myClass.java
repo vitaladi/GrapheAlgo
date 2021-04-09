@@ -14,7 +14,8 @@ public class myClass {
 		
 		Graphe test = new Graphe();
 	
-		int[] fs= {13,2,3,4,0,2,3,4,0,5,0,0,4,0}, aps = {5,1,5,9,11,12};
+		int[] fs= {13,1,3,5,0,2,3,4,0,5,0,0,4,0}, aps = {5,1,5,9,11,12};
+		//int[] fs= {12,1,2,3,0,1,2,3,0,1,2,3,0}, aps = {3,1,5,9};
 		
 		int[][] matAdj;
 		
@@ -28,6 +29,7 @@ public class myClass {
 		test.matAdjVersFsAps();
 		
 		test.afficherFs();
+		System.out.println("");
 		test.afficherAps();
 		
 		
@@ -37,6 +39,24 @@ public class myClass {
 		System.out.println("");
 		
 		
+		
+		System.out.println("Matrice des distances :");
+		
+		
+		
+		for(int j = 1; j <= aps[0];j++)
+		{
+			int[] r = test.desc_largeur(j);
+			System.out.println("");
+			
+			for(int i = 1; i <= r[0]; i++)
+			{
+				System.out.print(r[i]+"|");
+			}
+		}
+		
+		
+		/*
 		
 		BufferedReader in = new BufferedReader(new FileReader("D:/Graphes/donnees.txt"));
 		String line;
@@ -54,16 +74,11 @@ public class myClass {
 		        System.out.println(matcher1.group(1));
 	
 		    }
-		}
-		
-			
-		
-		
+		}	
 		in.close();
+	
+		*/
 		
-		
-
-	    
 		
 	}
 	
