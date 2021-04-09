@@ -11,7 +11,6 @@ public class Main {
 		
 		int origine, destination;
 		
-		
 		System.out.println("Saisie d'un graphe non oriente value arete par arete ");
 		System.out.println();
 		System.out.print("Donnez le nombre de sommets : ");
@@ -99,67 +98,7 @@ public class Main {
 			System.out.print(cfc[i] + " ");
 		}
 	}
-	
-	//probleme sur les resultats attendus
-	public static void testTarjan() {
-		int[] fs = { 22, 2, 3, 4, 0, 5, 0, 6, 0, 7, 0, 1, 6, 0, 3, 4, 7, 8, 0, 4, 0, 7, 0 };
-		int[] aps = { 8, 1, 5, 7, 9, 11, 14, 19, 21 };
 
-		int taille = aps.length+1;
-		int[] pilch = new int[taille];
-		int[] cfc = new int[taille];
-		boolean[] entarj = new boolean[taille];
-		int[] ro = new int[taille];
-		int[] tarj = new int[taille];
-		int[] prem = new int[taille];
-		int[] num = new int[taille];
-		int p = 0;
-		int nb=0;
-
-		Graphe g = new Graphe();
-
-		for (int s = 1; s <= aps[0]; s++) {
-
-			if (num[s] == 0) {
-				g.traverse(s, p, nb, fs, aps, tarj, num, ro, cfc, pilch, prem, entarj);
-
-			}
-		}
-		System.out.print("Pilch :");
-		for (int i = 1; i < aps.length; i++) {
-			System.out.print(pilch[i] + " ");
-		}
-		System.out.println();
-
-		System.out.print("Prem :");
-		for (int i = 1; i < aps.length; i++) {
-			System.out.print(prem[i] + " ");
-		}
-		System.out.println();
-
-		System.out.print("CFC :");
-		for (int i = 1; i < aps.length; i++) {
-			System.out.print(cfc[i] + " ");
-		}
-		System.out.println();
-		
-		System.out.print("Num :");
-		for (int i = 1; i < aps.length; i++) {
-			System.out.print(num[i] + " ");
-		}
-		System.out.println();
-		
-		System.out.print("Ro :");
-		for (int i = 1; i < aps.length; i++) {
-			System.out.print(ro[i] + " ");
-		}
-		System.out.println();
-		
-		System.out.print("Tarj :");
-		for (int i = 1; i < aps.length; i++) {
-			System.out.print(tarj[i] + " ");
-		}
-	}
 	
 	public static void testCodagePrufer() {
 		//dans P[0] on aura n-2 où n est le nombre de sommets
@@ -208,7 +147,6 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		//testTarjan();
 		//testDecodagePrufer();
 		//testCodagePrufer();
 		//testKruskal();

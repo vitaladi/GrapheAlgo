@@ -1,9 +1,5 @@
 package graphe;
 
-import java.lang.reflect.Array;
-
-import java.util.Arrays;
-
 import arete.Arete;
 
 public class Graphe {
@@ -15,14 +11,29 @@ public class Graphe {
 	private String [] nomsSommets;
 	private int nbAretes;
 	
+	private int[] fs;
+	private int[] aps;
+	
+	
+	//attributs pour tarjan
+	int[] num;
+	int[] pilch;
+	int[] cfc;
+	int[] tarj;
+	boolean[] entarj;
+	int[] prem;
+	int nb;
+	int p;
+	
 	
 	//constructeurs
 	public Graphe(int nbSommets,  Arete [] aretes) {
 		this.nbSommets = nbSommets;
 		this.aretes = aretes;
-		//this.nbAretes=this.aretes.length-1;
 	}
-
+	public Graphe(int nbSommets) {
+		this(nbSommets,null);
+	}
 	public Graphe() {
 		this(0, null);
 	}
@@ -53,6 +64,14 @@ public class Graphe {
 	
 	public Arete getIndexArete(int index) {
 		return this.aretes[index];
+	}
+	
+	public int[] getFs() {
+		return fs;
+	}
+	
+	public int[] getAps() {
+		return aps;
 	}
 	
 	//Setters
@@ -98,48 +117,78 @@ public class Graphe {
 		pilch[0] = pilch[var];
 		return var;
 	}
+	//tarjan
+	public void tarjan() {
+    	num = new int[nbSommets +1];
+    	pilch = new int[nbSommets +1];
+    	cfc = new int[nbSommets +1];
+    	tarj = new int[nbSommets +1];
+    	entarj = new boolean[nbSommets +1];
+    	prem = new int[nbSommets+1];
+    	
+    	for (int i = 0; i < nbSommets+1; i++) {
+    		num[i] = 0;
+    		pilch[i] = 0;
+    		cfc[i] = 0;
+    		tarj[i] = 0;
+    		entarj[i] = false;
+    		prem[i] = 0;
+    	}
+    	
+    	int n = aps[0];
+    	p = 0;
+    	nb = 0;
+    	for (int s = 1; s <= n; s++) {
+    		if (num[s] == 0) {
+    			traverse(s);
+    		}
+    	}
+    	prem[0] = nb;
+    }
 	
-	//probleme sur les resultats attendus 
-	public void traverse (int s,int p,int n,int[]fs,int[]aps,int[]tarj,int[]num,int[]ro,int[]cfc,int[]pilch,int[]prem,boolean[]entarj) {
-		p++;
-		num[s]=p;
-		ro[s]=p;
-		
-		empiler(s,tarj);
-		entarj[s]=true;
-		int t;
-		
-		for (int k=aps[s];(t=fs[k])!=0;k++) {
-			if (num[t]==0) {
-				traverse(t,p,n,fs,aps,tarj,num,ro,cfc,pilch,prem,entarj);
-				if (ro[t]<ro[s]) {
-					ro[s]=ro[t];
-				}
-			}
-			else {
-				if (entarj[t]==true && num[t]<ro[s]) {
-					ro[s]=num[t];
-				}
-			}
-		}
-		
-		if (ro[s]==num[s]) {
-			n++;
-			int u;
-			do {
-				
-				u=depiler(tarj);
-				entarj[u]=false;
-				
-				empiler(u,pilch);
-				cfc[u]=n;
-				
-			} while (u!=s);
-			prem[n]=pilch[0];
-			pilch[0]=0;
-		}
-		
-	}
+	//pour tarjan
+	public void traverse(int s) {
+    	p++;
+    	int[] ro = new int[nbSommets+1];
+    	ro[s] = p;
+    	num[s] = p;
+    	empiler(s,tarj);
+    	entarj[s] = true;
+    	int t;
+    	
+    	for (int k = aps[s]; (t=fs[k]) != 0; k++) {
+    		if (num[t] == 0) {
+    			traverse(t);
+    			if (ro[t] < ro[s]) {
+    				ro[s] = ro[t];
+    			}
+    		}
+    		else {
+    			if ((entarj[t] == true) && (num[t] < ro[s])) {
+    				ro[s] = num[s];
+    			}
+    		}
+    	}
+    	
+    	if (ro[s] == num[s]) {
+    		nb++;
+    		int x = depiler(tarj);
+    		entarj[x] = false;
+    		prem[nb] = x;
+    		cfc[x] = nb;
+    		int ind = x;
+    		while(x != s) {
+    			x = depiler(tarj);
+    			entarj[x] = false;
+    			pilch[ind] = x;
+    			ind = x;
+    			cfc[x] = nb;
+    		}
+    		pilch[s] = 0;
+    	}
+    	
+    }
+	
 	
 	
 	public void codagePrufer(int[][]adj, int[] P) {
