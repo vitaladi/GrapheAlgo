@@ -8,11 +8,26 @@ public class Graphe {
 	private Arete [] aretes;
 	private int [][] matriceAdjacence;
 	private String [] nomsSommets;
+	
+	private int[] fs;
+	private int[] aps;
 
 	public Graphe(int nbSommets,  Arete [] aretes)
 	{
 		this.nbSommets = nbSommets;
 		this.aretes = aretes;
+	}
+	
+	public Graphe(int fs[], int aps[])
+	{
+		this.fs=fs;
+		this.aps=aps;
+		this.nbSommets = aps[0];
+	}
+	
+	public Graphe(int [][] matrice)
+	{
+		this.matriceAdjacence=matrice;
 	}
 
 	public Graphe()
@@ -61,11 +76,39 @@ public class Graphe {
 		this.nomsSommets = nomsSommets;
 	}
 	
+	public void empiler(int s, int [] pilch)
+	{
+		pilch[s] = pilch[0];
+		pilch[0] = s;
+	}
 	
-	public void rang(int[] rang, int[] fs, int[] aps)
+	public void afficherFs()
+	{
+		System.out.print("FS: ");
+		int n = fs[0];
+		for(int i =1; i<=n; i++)
+		{
+			System.out.print(fs[i]);
+			System.out.print("-");
+		}
+	}
+	
+	public void afficherAps()
+	{
+		System.out.print("APS: ");
+		int n = aps[0];
+		for(int i =1; i<=n; i++)
+		{
+			System.out.print(aps[i]);
+			System.out.print("-");
+		}
+	}
+	
+	
+	public int[] rang(int[] fs, int[] aps)
 	{
 	    int n = aps[0], taillefs = fs[0], s, k, h, t ;
-	    rang = new int[n+1];
+	    int []rang = new int[n+1];
 	    int[] ddi = new int[n+1];
 	    int[] pilch = new int[n+1];
 	    int[] prem = new int[n+1];
@@ -92,7 +135,7 @@ public class Graphe {
 	        rang[s] = -1;
 	        if(ddi[s] == 0)
 	        {
-	            //empiler(s,pilch);
+	            empiler(s,pilch);
 	        }
 	    }
 	    
@@ -114,7 +157,7 @@ public class Graphe {
 	                --ddi[t];
 	                if(ddi[t] == 0)
 	                {
-	                    //empiler(t,pilch);
+	                    empiler(t,pilch);
 	                }
 	                h++;
 	                t = fs[h];
@@ -125,29 +168,40 @@ public class Graphe {
 	        s = pilch[0];
 	        prem[k+1] = s;
 	    }
+	    return rang;
+	}
+	
+	public void afficheRang(int rang[])
+	{
+		System.out.print("Rang : ");
+		for(int i=1 ; i<rang.length ; ++i)
+		{
+			System.out.print(rang[i]);
+			System.out.print("-");
+		}
 	}
 	
 	public void fusion(int i, int j, int[] prem, int[] pilch, int[] cfc, int[] nb)
 	{
-	    int x;
-	    
-	    if(nb[i] < nb[j])
+	    int aux;
+		
+		if(nb[i] < nb[j])
 	    {
-	        x = i;
+	        aux = i;
 	        i = j;
-	        j = x;
+	        j = aux;
 	    }
 	    
-	    x = prem[j];
-	    cfc[x] = i;
+	    aux = prem[j];
+	    cfc[aux] = i;
 	    
-	    while(pilch[x] != 0)
+	    while(pilch[aux] != 0)
 	    {
-	        x = pilch[x];
-	        cfc[x] = i;
+	        aux = pilch[aux];
+	        cfc[aux] = i;
 	    }
 	    
-	    pilch[x] = prem[i];
+	    pilch[aux] = prem[i];
 	    prem[i] = prem[j];
 	    nb[i] += nb[j];
 	}
