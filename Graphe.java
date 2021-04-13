@@ -21,6 +21,13 @@ public class Graphe {
 		this(0, null);
 	}
 	
+	public Graphe(int[][] matriceAdjacence) // mon constructeur utile
+	{
+		this.matriceAdjacence = matriceAdjacence;
+		
+		matAdjVersFsAps();
+	}
+	
 	public String [] getNomsSommets() {
 		return nomsSommets;
 	}
@@ -55,24 +62,24 @@ public class Graphe {
 	
 	
 	
-	public int[][] fsApsVersMatAdj(int[] fs, int aps[])
+	public int[][] fsApsVersMatAdj(int[] fs, int aps[]) //méthode plus globale disponible au besoin, à intégrer dans son constructeur + matAdj calculée
 	{
-		int n =aps[0];
-		int m = fs[0] -n;
+		int nombreSommets =aps[0];
+		int nombreSuccesseurs = fs[0] -nombreSommets;
 		
-		int[][] matAdj = new int[n+1][n+1];
-		matAdj[0][0] = n;
-		matAdj[0][1] = m;
+		int[][] matAdj = new int[nombreSommets+1][nombreSommets+1];
+		matAdj[0][0] = nombreSommets;
+		matAdj[0][1] = nombreSuccesseurs;
 		
-		for(int i =1; i <=n; i++)
+		for(int i =1; i <=nombreSommets; i++)
 		{
-			for(int j = 1; j <=n;j++)
+			for(int j = 1; j <=nombreSommets;j++)
 			{
 				matAdj[i][j] =0;
 			}
 		}
 		
-		for(int i = 0; i <= n;i++)
+		for(int i = 0; i <= nombreSommets;i++)
 		{			
 		
 		    for(int k=aps[i] ;fs[k] !=0 ;k++)
@@ -86,20 +93,20 @@ public class Graphe {
 	
 	public void matAdjVersFsAps()
 	{
-		int n = matriceAdjacence[0][0];		
-		int m = matriceAdjacence[0][1];
+		int nombreSommets = matriceAdjacence[0][0];		
+		int nombreSuccesseurs = matriceAdjacence[0][1];
 		
-		aps = new int[n+1];
-		aps[0] = n;
+		aps = new int[nombreSommets+1];
+		aps[0] = nombreSommets;
 		
-		fs = new int[n+m+1];
-		fs[0] = n+m;int k = 1;
+		fs = new int[nombreSommets+nombreSuccesseurs+1];
+		fs[0] = nombreSommets+nombreSuccesseurs;int k = 1;
 		
-		for (int i = 1; i <= n; i++)
+		for (int i = 1; i <= nombreSommets; i++)
 		{
 			aps[i] = k;
 			
-			for (int j = 1; j <= n; j++)
+			for (int j = 1; j <= nombreSommets; j++)
 			{
 				if (matriceAdjacence[i][j] != 0)
 				{
@@ -112,9 +119,9 @@ public class Graphe {
 	}
 	
 	
-	public void afficherMatAdj(int[][] matAdj)
+	public void afficherMatAdj()
 	{
-		int n = matAdj[0][0];
+		int n =matriceAdjacence[0][0];
 		
 		System.out.println("");
 		System.out.println("Matrice d'adjacence:");
@@ -124,7 +131,7 @@ public class Graphe {
 		{
 			for(int j = 1; j <=n; j++)
 			{
-				System.out.print(matAdj[i][j]);
+				System.out.print(matriceAdjacence[i][j]);
 			}
 			System.out.println("");
 		}
@@ -132,6 +139,7 @@ public class Graphe {
 	
 	public void afficherFs()
 	{
+		System.out.println("");
 		System.out.println("");
 		System.out.println("fs:");
 		System.out.println("");
@@ -146,6 +154,7 @@ public class Graphe {
 	
 	public void afficherAps()
 	{
+		System.out.println("");
 		System.out.println("");
 		System.out.println("aps:");
 		System.out.println("");
@@ -162,43 +171,61 @@ public class Graphe {
 	
 	
 	
-	
-	
-	
-	public int[] desc_largeur(int r) 
-	{ 
-		int nb_som = aps[0]; 
-		int i = 0, j = 1, k = 0, ifin, s, t, it; 
-		int[] fil = new int[nb_som+1];
-		fil[0] = nb_som; 
-		int[] dist = new int[nb_som+1]; 
-		dist[0] = nb_som; 
-		fil[1] = r;
+	public void afficherMatricedistance()
+	{
+
+		System.out.println("");
+		System.out.println("");
+		System.out.println("Matrice des distances :");
 		
-		for (int h = 1; h <= nb_som; h++) 
+		for(int j = 1; j <= aps[0];j++)
+		{
+			int[] r = parcours_largeur(j);
+			System.out.println("");
+			
+			for(int i = 1; i <= r[0]; i++)
+			{
+				System.out.print(r[i]+"|");
+			}
+		}
+	}
+				
+	
+	public int[] parcours_largeur(int depart) 
+	{ 
+		int nombreSommets = aps[0]; 
+		int a = 0, b = 1, c = 0, fin, inter, inter2, inter3; 
+		int[] fil = new int[nombreSommets+1];
+		fil[0] = nombreSommets; 
+		int[] dist = new int[nombreSommets+1]; 
+		dist[0] = nombreSommets; 
+		fil[1] = depart;
+		
+		for (int h = 1; h <= nombreSommets; h++) 
 		{
 				dist[h] = -1; 
-				dist[r] = 0;
+				dist[depart] = 0;
 		}
 			
-		while ( i < j )     
+		while ( a < b )     
 		{
-			k++; 
-			ifin = j; 
-			while (i < ifin)   
+			c++; 
+			fin = b; 
+			while (a < fin)   
 			{
-				i++; s = fil[i]; 
-				it = aps[s]; 
-				t = fs[it];
-				while (t > 0)    
+				a++; 
+				inter = fil[a]; 
+				inter3 = aps[inter]; 
+				inter2 = fs[inter3];
+				while (inter2 > 0)    
 				{ 
-					if (dist[t] == -1) 
+					if (dist[inter2] == -1) 
 					{ 
-						j++; 
-						fil[j] = t;  
-						dist[t] = k;      
+						b++; 
+						fil[b] = inter2;  
+						dist[inter2] = c;      
 					}
-					t = fs[++it];
+					inter2 = fs[++inter3];
 				}
 			}
 			
