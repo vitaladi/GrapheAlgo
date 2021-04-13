@@ -189,6 +189,49 @@ public class Graphe {
     	
     }
 	
+	public void graphe_reduit() {
+    	int j = 0;
+    	int t;
+    	//tableau qui indique les sommets qui sont deja integres
+    	boolean[] integre = new boolean[nbSommets+1];
+    	
+    	int[] nouveau_fs = new int[nbSommets+1];
+    	int[] nouveau_aps = new int[nbSommets+1];
+    	for (int i = 0; i < nbSommets+1; i++) {
+    		integre[i] = false;
+    		nouveau_fs[i] = 0;
+    		nouveau_aps[i] = 0;
+    	}
+    	for (int l = 1; l <= prem[0]; l++) {
+    		integre[l] = true;
+    		int s = prem[l];
+    		nouveau_aps[l] = j+1;
+    		while(s !=0) {
+    			for (int k = getAps()[s]; (t = getFs()[k]) != 0; k++) {
+    				if (integre[cfc[t]] == false) {
+    					j++;
+    					nouveau_fs[j] = cfc[t];
+    					integre[cfc[t]] = true;
+    				}
+    			}
+    			s = pilch[s];
+    		}
+    		j++;
+    		nouveau_fs[j] = 0;
+    	}
+    	nouveau_fs[0] = j;
+    	
+    	System.out.println("FS du graphe reduit :");
+    	for (int i = 0; i < nouveau_fs.length; i++) {
+    		System.out.print(nouveau_fs[i] + " ");
+    	}
+    	System.out.println();
+    	
+    	System.out.println("APS du graphe reduit :");
+    	for (int i = 0; i < nouveau_aps.length; i++) {
+    		System.out.print(nouveau_aps[i] + " ");
+    	}
+    }
 	
 	
 	public void codagePrufer(int[][]adj, int[] P) {
