@@ -75,6 +75,15 @@ public class Graphe {
 	}
 	
 	//Setters
+	public void setFs(int[] fs) {
+		this.fs=fs;
+	}
+	
+	public void setAps(int[] aps) {
+		this.aps=aps;
+	}
+	
+	
 	public void setIndexArete(Arete ar,int index) {
 		this.aretes[index]=ar;
 	}
@@ -144,6 +153,24 @@ public class Graphe {
     		}
     	}
     	prem[0] = nb;
+    	
+    	//Affichage tableaux pilch prem et cfc
+    	System.out.print("Pilch : ");
+		for (int i = 1; i < pilch.length; i++) {
+			System.out.print(pilch[i] + " ");
+		}
+		System.out.println();
+
+		System.out.print("Prem : ");
+		for (int i = 1; i < prem.length; i++) {
+			System.out.print(prem[i] + " ");
+		}
+		System.out.println();
+		
+		System.out.print("CFC : ");
+		for (int i = 1; i < cfc.length; i++) {
+			System.out.print(cfc[i] + " ");
+		}
     }
 	
 	//pour tarjan
@@ -262,10 +289,8 @@ public class Graphe {
 	
 	public void decodagePrufer(int[] P, int[] I, int[] b) {
 		int n=P[0]+2;
-		//I[0] vaut 0
-		//I[i] vaut 1 si le sommet i est présent
+		
 		I=new int[n+1];
-		//tab d'occurence b pour savoir si un element de I est dans P et cmb de fois
 		b=new int[n+1];
 		for (int i=0;i<n;i++) {
 			I[i]=1;
@@ -342,7 +367,6 @@ public class Graphe {
 	//Graphe g est le graphe d'entrée et il est déja trié
 	//Graphe t est le graphe de sortie
 	public void kruskal(Graphe g, Graphe t,int []prem, int []pilch, int []cfc, int []NbElem)
-	//Les tableaux prem, pilch et cfc sont des variables globales initialis�es dans le main
 	{
 		t.aretes = new Arete[g.nbSommets-1];
 		int x; 
