@@ -1,0 +1,32 @@
+
+// pour définir le graphe:  graphe (nombre de sommets, orienté ou non, pondéré ou non)
+//exemple : graphe(3, true, false) 
+// instruction à écrire en premier
+
+// pour définir une arête: A (Numéro Origine, Numéro destination) 
+//ou  (Numéro Origine, Numéro destination, pondération) -> il faut avoir pondéré = true pour celle là
+//exemple: A(1,2) ou A(1,2,100)
+// les sommets commencent au numéro 1 et pas 0
+
+//Pour définir les noms des sommets (optionnel) : S (numéroSommet, nom); faire chaque sommet ainsi
+//exemple : S ( 3, paris)
+// ou encore S (1, Mulhouse)
+
+// Ajoutez deux slash pour définir un commentaire
+
+
+//exemple de données créant un graphe:
+//graphe(3, true, false)
+//A(1,2)
+//A(2,3)
+//A(3,3)
+
+
+
+
+//données actuelles:
+
+graphe(4,true, false)
+A(1,2) 
+A(2,3)
+A(3,4)
