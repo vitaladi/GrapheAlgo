@@ -16,6 +16,13 @@ public class Arete {
 		this(0, 0, 0);
 	}
 	
+	public void setOrigine(int origine){
+		this.origine = origine;
+	}
+
+	public void setDestination(int destination){
+		this.destination = destination;
+	}
 
 	public void setPoids(int poids){
 		this.poids = poids;
