@@ -12,8 +12,8 @@ public class Graphe {
 	private String[] nomsSommets;
 	private int[] fs;
 	private int[] aps;
-	private int[] fp;
-	private int[] app;
+	private static int[] fp;
+	private static int[] app;
 	int[] pilch;
 	
 	
@@ -83,65 +83,56 @@ public class Graphe {
 
 
 
-	public void ordonnancement(int fp[], int app[], int d[], int lc[], int fpc[], int appc[]) {
-		
-		int kc = 1;
-		int t = 0;
-		int n= app[0];
-		int m=fp[0];
-		
-		fpc = new int [m+1];
-		appc = new int [n+1];
-		
-		appc[0]= n;
-		lc = new int [n+1];
-		
-		lc[0] = n;
-		
-		int longueur;
-		
-		lc[1] = 0;
-		fpc[1] = 0;
-		appc[1] = 1;
 	
-		
-		for (int s = 2; s <= n; s++) {
-			kc = app[s];
-			lc[s] = 0;
-			appc[s] = kc + 1;
-			
-			for (int k = app[s]; (t = fp[k]) != 0; k++) {
-				longueur = lc[t] + d[t];
-				
-				if (longueur >= lc[s]) {
-					
-					if (longueur == lc[s]) {
-						kc++;
-						fpc[kc] = t;
-					} 
-					else {
-						lc[s] = longueur;
-						kc = appc[s];
-						fpc[kc] = t;
-					}
-				}
-			}
-			kc++;
-			fpc[kc] = 0;
-		}
-		fpc[0] = kc;
-		
-		 int suivant;
+	 public void ordonnancement(int[] D) {
+	    	int n = app[0];
+	    	int m = fp[0];
+	        int[] fpc = new int[m+1];
+	        int[] appc = new int[n+1];
+	        int[] lc = new int[n+1]; 
+	        lc[0] = n;
+	        
+	        appc[0] = n;
+	        int kc;
+	        int t,longueur;
+	        lc[1] = 0;
+	        fpc[1] = 0;
+	        appc[1] = 1;
+	        kc = 1;
+	        
+	        for (int s = 2 ; s <= n; s++) {
+	        	lc[s] = 0;
+	        	appc[s] = kc+1;
+	        	for (int k = app[s]; (t=fp[k]) != 0; k++) {
+	        		longueur = lc[t] + D[t];
+	        		if (longueur >= lc[s]) {
+	        			if (longueur == lc[s]) {
+	        				kc++;
+	        				fpc[kc] = t;
+	        			}
+	        			else {
+	        				lc[s] = longueur;
+	        				kc = appc[s];
+	        				fpc[kc] = t;
+	        			}
+	        		}
+	        	}
+	        	kc++;
+	        	fpc[kc] = 0;
+	        }
+	        fpc[0] = kc;
+	                      
+	        int suiv;
 	        System.out.println("\nLe chemin critique est \n");
 	        for (int i = 0; i < appc[0] ; i++) {
-	            suivant = appc[i];
-	            System.out.print(fpc[suivant]+" ");
-
+	            suiv = appc[i];
+	            System.out.print(fpc[suiv]+" ");
 	        }
-	}
+	    }
 
 	public void matAdjVersFsAps()
 	{
+		
 		int nombreSommets = matriceAdjacence[0][0];		
 		int nombreSuccesseurs = matriceAdjacence[0][1];
 		
@@ -209,57 +200,61 @@ public class Graphe {
 			System.out.print(app[i] + " ");
 		}
 	}
+	public void fs_aps2fp_app() {
+		int[]aps = getAps(); 
+		int[] fs = getFs(); 
+		int n = aps[0]; 
+		int m=fs[0];
+		fp = new int[m+1];
+		app = new int[nbSommets+1];
+		fp[0]=m; 
+		app[0]=n; 
+		app[1]=1; 
+		for(int i=1; i<n;i++) {
+			app[i+1]=app[i]+getDDI()[i]+1; 
+		}
+		int k=1; 
+		for(int i=1;i<=n;i++) {
+			while(fs[k]!=0) {
+				fp[app[fs[k]]]=i; 
+				app[fs[k]]++;
+				k++;
+			}
+			k++;
+		}
+		fs[app[n]]=0; 
+		for(int i=n-1;i>=1;i--) {
+			fp[app[i]]=0; 
+			app[i+1]=app[i]+1; 
+		}
+		app[1]=1;  
+	}
+	
+	
+    public int[] getDDI() {
+       int[] ddi = new int[aps[0]+1];
+       int s;
+	   for(int i=1; i <=aps[0] ; i++) ddi[i]=0;
+	   for(int i=1; i <=fs[0] ; i++){
+	  		s=fs[i];
+	  		if (s >0) ddi[s]++;
+	  	}
+	   return ddi;
+    }
 	
 	public static void run() {
 
-		int [] lc = {0,0};
-		int [] fpc= {1,0};
-		int [] appc = {1,1};
-		int [] app= {2,0};
-		int [] fp = {2,1} ;
 		
 		
-		/*int[]aps = getAps(); 
-		int[] fs = getFs(); 
 		
-		int n = aps[0]; 
-		int m=fs[0];
-		
-		fp = new int[m+1];
-		app = new int[getNbSommets()+1];
-		*/
 
 	    Graphe g = new Graphe();
-	    int[] d = g.getAps();
+	    g.fs_aps2fp_app();
 	    
-	   g.matAdjVersFsAps();
-	    
-	   g.fsApsVersMatAdj(fp, app);
-	    
-	   // d_graphe.a2fs_aps(d_graphe.matriceAdjacence(),fp,app);
+	   
+	    int[] D = {0,6,4,5,4,9,7,8,2,5,2,7,6,5,7,0};
 
-	    for (int i=0;i<g.getNbSommets();i++)
-	    {
-	        d[i]=g.getAretes()[i].getPoids();
-	    }
-
-	    String [] Contraintes = g.getNomsSommets();
-	    
-	    Arete [] a = g.getAretes();
-	    
-	    String [] s= g.getNomsSommets();
-	    for (int i=0;i<Contraintes.length ;i++)
-	    {
-	        Contraintes[i]= " ";
-	    }
-	    for (int i=0;i<g.getNbSommets();i++)
-	    {
-
-	       Contraintes[a[i].getDestination()-1]+=s[a[i].getOrigine()-1]+" ";
-
-	    }
-
-	    g.ordonnancement(fp,app,d,lc,fpc,appc);
+	    g.ordonnancement(D);
 		
 		
 
